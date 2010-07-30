@@ -19,7 +19,7 @@ import (
 )
 
 //secret key used to store cookies
-var secret = ""
+var secret = []byte{}
 
 type conn interface {
     StartResponse(status int)
@@ -83,10 +83,11 @@ func (ctx *Context) SetCookie(name string, value string, age int64) {
     ctx.SetHeader("Set-Cookie", cookie, false)
 }
 
-func SetCookieSecret(key string) { secret = key }
+func SetCookieSecret(key string) { secret = []byte(key) }
+func SetCookieSecretBin(key []byte) { secret = key }
 
 func getCookieSig(val []byte, timestamp string) string {
-    hm := hmac.NewSHA1([]byte(secret))
+    hm := hmac.NewSHA1(secret)
 
     hm.Write(val)
     hm.Write([]byte(timestamp))
