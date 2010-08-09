@@ -81,6 +81,7 @@ func (ctx *Context) SetCookie(name string, value string, age int64) {
     utc1 := time.SecondsToUTC(utctime.Seconds() + 60*30)
     cookie := fmt.Sprintf("%s=%s; expires=%s", name, value, webTime(utc1))
     ctx.SetHeader("Set-Cookie", cookie, false)
+    ctx.Request.Cookies[name] = value
 }
 
 func SetCookieSecret(key string) { secret = []byte(key) }
